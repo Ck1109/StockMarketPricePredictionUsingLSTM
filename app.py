@@ -70,28 +70,20 @@ def predict():
     model.add(Activation('linear'))
  
 # MODEL COMPILING AND TRAINING
-    model.compile(loss='mean_squared_error', optimizer='adam')  # Try SGD, adam, adagrad and compare!!!
+    model.compile(loss='mean_squared_error', optimizer='adam') 
     model.fit(trainX, trainY, epochs=20, verbose=2)
 
     # PREDICTION
     trainPredict = model.predict(trainX)
     testPredict = model.predict(testX)
    
-# DE-NORMALIZING FOR PLOTTING
+# DE-NORMALIZING 
     trainPredict = scaler.inverse_transform(trainPredict)
     trainY = scaler.inverse_transform([trainY])
     testPredict = scaler.inverse_transform(testPredict)
     testY = scaler.inverse_transform([testY])
  
-# CREATING SIMILAR DATASET TO PLOT TRAINING PREDICTIONS
-    trainPredictPlot = np.empty_like(OHLC_avg)
-    trainPredictPlot[:, :] = np.nan
-    trainPredictPlot[step_size:len(trainPredict)+step_size, :] = trainPredict
-  
-# CREATING SIMILAR DATASSET TO PLOT TEST PREDICTIONS
-    testPredictPlot = np.empty_like(OHLC_avg)
-    testPredictPlot[:, :] = np.nan
-    testPredictPlot[len(trainPredict)+(step_size * 2)+1:len(OHLC_avg)-1, :] = testPredict
+
    
 # DE-NORMALIZING MAIN DATASET
     OHLC_avg = scaler.inverse_transform(OHLC_avg)
